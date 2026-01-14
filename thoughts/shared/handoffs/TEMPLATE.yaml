@@ -1,0 +1,32 @@
+# Handoff Template
+# Copy this file and rename to <date>-<topic>.yaml
+
+session_id: "YYYY-MM-DD-topic"
+timestamp: ""
+
+# What was accomplished this session
+completed:
+  - Item 1
+  - Item 2
+
+# What should be done next
+next_steps:
+  - Task 1
+  - Task 2
+
+# Key decisions made and why
+decisions:
+  - decision: "Description of decision"
+    rationale: "Why this was chosen"
+
+# Current blockers or questions
+blockers: []
+
+# Context for next session
+context:
+  working_directory: ""
+  branch: ""
+  key_files: []
+
+# Any learnings or insights
+learnings: []
