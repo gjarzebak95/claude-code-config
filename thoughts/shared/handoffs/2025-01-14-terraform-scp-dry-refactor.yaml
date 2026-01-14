@@ -1,0 +1,63 @@
+# Handoff: Terraform SCP Overrides DRY Refactoring
+# Session documenting major improvements to NDX Innovation Sandbox cost controls
+
+session_id: "2025-01-14-terraform-scp-dry-refactor"
+timestamp: "2025-01-14T12:00:00Z"
+
+# What was accomplished this session
+completed:
+  - "Refactored budgets-manager module - reduced ~170 lines through DRY locals"
+  - "Converted 10 individual service budgets to single for_each resource with config map"
+  - "Centralized repeated values (cost_types, SNS ARNs, limit_unit) into locals block"
+  - "Moved EC2 instance types list to locals in scp-manager module"
+  - "Removed hardcoded email addresses from environments/ndx-production/variables.tf"
+  - "Fixed GitHub Actions 'Argument list too long' error for large terraform plans"
+  - "Created PR #3 in innovation-sandbox-on-aws-utils for terraform reminder"
+  - "Set up claude-code-config repo with terraform skills, hooks, and continuity system"
+
+# What should be done next
+next_steps:
+  - "Get PR #8 approved in terraform-scp-overrides repo"
+  - "Run terraform plan to verify all changes work correctly"
+  - "Apply changes to ndx-production environment"
+  - "Verify budget alerts are working with new for_each structure"
+  - "Test pre-commit and post-tool-use hooks in real terraform workflow"
+
+# Key decisions made and why
+decisions:
+  - decision: "Use for_each with config map for service budgets"
+    rationale: "Reduces 10 near-identical resource blocks to 1, making maintenance easier and reducing drift risk"
+
+  - decision: "Move hardcoded emails to GitHub secrets"
+    rationale: "Emails should not be in version control; using TF_VAR_budget_alert_emails from GitHub Actions secrets"
+
+  - decision: "Read terraform plan from file instead of env var"
+    rationale: "Environment variables have size limits; large plans (3000+ lines) cause 'Argument list too long' errors"
+
+  - decision: "Use coalesce() for nullable variable defaults"
+    rationale: "Allows variables to have sensible defaults while still being overridable; avoids null check complexity"
+
+  - decision: "Create dedicated claude-code-config repo"
+    rationale: "Keeps Claude customizations separate from project repos; can be symlinked to ~/.claude/ for global use"
+
+# Current blockers or questions
+blockers:
+  - "PR #8 needs code review and approval before merge"
+
+# Context for next session
+context:
+  working_directory: "/Users/gjarzebak/Desktop/Projects/terraform-scp-overrides"
+  branch: "feat/cost-controls-dry-refactor"
+  pr_url: "https://github.com/co-cddo/terraform-scp-overrides/pull/8"
+  key_files:
+    - "modules/budgets-manager/main.tf"
+    - "modules/scp-manager/main.tf"
+    - "environments/ndx-production/variables.tf"
+    - ".github/workflows/terraform.yaml"
+
+# Any learnings or insights
+learnings:
+  - "Terraform for_each with config maps is powerful for reducing repetitive resources"
+  - "GitHub Actions env vars have practical size limits around 1MB"
+  - "Dynamic blocks within for_each resources work well for variable notification thresholds"
+  - "Claude Code hooks can auto-validate terraform after every .tf file edit"
